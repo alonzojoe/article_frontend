@@ -16,12 +16,17 @@ const routes = [
     children: [
       {
         path: "",
+        name: "feed",
+        component: () => import("@/pages/NewsFeed.vue"),
+      },
+      {
+        path: "/article/:id?",
         name: "create",
         component: () => import("@/pages/NewArticle.vue"),
       },
     
     ],
-  },
+  },  
   {
     path: '/:pregMatch(.*)*',
     name: 'not-found',
