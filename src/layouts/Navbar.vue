@@ -1,30 +1,32 @@
 <template>
     <nav class="navbar fixed-top navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid d-flex justify-content-between">
-            <a class="navbar-brand" href="">Bulletin Board</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <!-- <ul class="navbar-nav">
-                    <li v-for="(m, index) in menus" class="nav-item" :index="index">
-                        <router-link :to="{ name: m.name }" class="nav-link" :class="{ active: route.name === m.name }"
-                            aria-current="page">{{ m.title }}</router-link>
-                    </li>
-                </ul> -->
+        <div class="container-fluid d-flex justify-content-between align-items-center">
+            <a class="navbar-brand" href="">Bulletin Board Articles </a>
+            <button class="btn btn-primary btn-sm">Create New Article</button>
+            <div class="d-flex align-items-center gap-1" v-if="user">
+                <a href="#" class="navbar-brand">Welcome: {{ user?.name }} </a>
+                <button class="btn btn-danger btn-sm">Logout</button>
             </div>
         </div>
     </nav>
 </template>
 
 <script>
+import { onMounted, ref } from 'vue'
 import { useRoute } from "vue-router";
 export default {
     name: "Navbar",
     setup() {
         const route = useRoute();
-    },
+        const user = ref({ name: '' })
+        onMounted(() => {
+            user.value = JSON.parse(localStorage.getItem('userData'))
+        })
+
+        return {
+            user
+        }
+    }
 };
 </script>
 
