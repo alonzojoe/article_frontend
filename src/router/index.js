@@ -13,18 +13,14 @@ const routes = [
     name: "main",
     component: () => import("@/layouts/AppLayout.vue"),
     meta: { requiresAuth: true },
-        // children: [
-    //   {
-    //     path: "",
-    //     name: "home",
-    //     component: () => import("@/pages/Home.vue"),
-    //   },
-    //   {
-    //     path: "/todos",
-    //     name: "todos",
-    //     component: () => import("@/pages/Todos.vue"),
-    //   },
-    // ],
+    children: [
+      {
+        path: "",
+        name: "create",
+        component: () => import("@/pages/NewArticle.vue"),
+      },
+    
+    ],
   },
   {
     path: '/:pregMatch(.*)*',

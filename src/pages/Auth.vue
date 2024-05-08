@@ -86,7 +86,7 @@ const resetForm = () => {
 
 const isLoading = ref(false)
 const loginSubmit = async () => {
-    if (!formData.value.email || !formData.value.password) {
+    if (formData.value.email.trim().length === 0 || !formData.value.password.trim().length === 0) {
         swal(
             "Warning",
             "Email and Password are Required!",
