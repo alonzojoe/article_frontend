@@ -3,10 +3,9 @@ import api from "@/api";
 const routes = [
   {
     path: "/",
-    name: 'auth',
+    name: "auth",
     component: () => import("@/pages/Auth.vue"),
-    meta: { requiresGuest: true }
-
+    meta: { requiresGuest: true },
   },
   {
     path: "/main",
@@ -24,15 +23,18 @@ const routes = [
         name: "create",
         component: () => import("@/pages/NewArticle.vue"),
       },
-    
+      {
+        path: "/details/:id",
+        name: "details",
+        component: () => import("@/pages/ViewDetails.vue"),
+      },
     ],
-  },  
+  },
   {
-    path: '/:pregMatch(.*)*',
-    name: 'not-found',
-    component: () => import('@/pages/NotFound.vue')
-  }
-
+    path: "/:pregMatch(.*)*",
+    name: "not-found",
+    component: () => import("@/pages/NotFound.vue"),
+  },
 ];
 
 const router = createRouter({
@@ -42,17 +44,15 @@ const router = createRouter({
 
 //guard
 router.beforeEach((to, from) => {
-  
-  const authenticated = localStorage.getItem('ajioasdmianc8a79sdy0fffaq')
-  api.defaults.headers.common['Authorization'] = `Bearer ${authenticated}`
+  const authenticated = localStorage.getItem("ajioasdmianc8a79sdy0fffaq");
+  api.defaults.headers.common["Authorization"] = `Bearer ${authenticated}`;
 
   if (to.meta.requiresGuest && authenticated) {
-    return { name: 'main' };
+    return { name: "main" };
   } else if (to.meta.requiresAuth && !authenticated) {
-    localStorage.removeItem('ajioasdmianc8a79sdy0fffaq');
-    return { name: 'auth' };
-  } 
-
-})
+    localStorage.removeItem("ajioasdmianc8a79sdy0fffaq");
+    return { name: "auth" };
+  }
+});
 
 export default router;

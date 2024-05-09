@@ -144,7 +144,7 @@ const article = ref({});
 const fetchSingleArticle = async (id) => {
   isLoading.value = true;
   try {
-    const response = await api.get("/article");
+    const response = await api.get(`/article/${id}`);
     console.log(response.data.data);
     if (response.data.data.length > 0) {
       article.value = await response.data.data.map((data) => {
@@ -165,7 +165,9 @@ const fetchSingleArticle = async (id) => {
 
 onMounted(async () => {
   user.value = JSON.parse(localStorage.getItem("userData"));
-  await fetchSingleArticle(route.params.id);
+  if (route.params.id) {
+    await fetchSingleArticle(route.params.id);
+  }
 });
 </script>
 

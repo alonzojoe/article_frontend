@@ -49,7 +49,7 @@
 
             <div class="col-12">
               <div class="row">
-                <div class="col-md-4 col-sm-12 mb-2">
+                <div class="col-md-3 col-sm-12 mb-2">
                   <button
                     class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center gap-1"
                     style="width: 90%"
@@ -72,21 +72,32 @@
                     >{{ article.votes.length }}
                   </button>
                 </div>
-                <div class="col-md-4 col-sm-12 mb-2">
+                <div class="col-md-3 col-sm-12 mb-2">
                   <button
                     class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center gap-1"
                     style="width: 90%"
+                    @click="viewArticle(article.id)"
                   >
                     <i class="bx bxs-chat"></i>{{ article.comments.length }}
                   </button>
                 </div>
-                <div class="col-md-4 col-sm-12 mb-2">
+                <div class="col-md-3 col-sm-12 mb-2">
                   <button
                     class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center gap-1"
                     style="width: 90%"
                     @click="viewArticle(article.id)"
                   >
                     <i class="bx bx-search-alt-2"></i>View
+                  </button>
+                </div>
+                <div class="col-md-3 col-sm-12 mb-2">
+                  <button
+                    v-if="article.user.id === user.id"
+                    class="btn btn-secondary btn-sm d-flex align-items-center justify-content-center gap-1"
+                    style="width: 90%"
+                    @click="updateArticle(article.id)"
+                  >
+                    <i class="bx bxs-edit-alt"></i>Edit
                   </button>
                 </div>
               </div>
@@ -176,8 +187,12 @@ const upVote = async (id) => {
   await fetchArticles();
 };
 
-const viewArticle = (id) => {
+const updateArticle = (id) => {
   router.push({ name: "create", params: { id: id } });
+};
+
+const viewArticle = (id) => {
+  router.push({ name: "details", params: { id: id } });
 };
 
 onMounted(async () => {
