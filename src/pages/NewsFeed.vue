@@ -10,6 +10,16 @@
         <span class="visually-hidden">Loading Articles...</span>
       </div>
     </div>
+
+    <div
+      class="d-flex align-items-center justify-content-center gap-2"
+      v-if="articles.length < 0"
+    >
+      <h3>No Articles found, add some?</h3>
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading Articles...</span>
+      </div>
+    </div>
     <div v-else>
       <Card class="mb-5" v-for="(article, index) in articles" :key="index">
         <div class="px-3 mt-3" v-if="article">
