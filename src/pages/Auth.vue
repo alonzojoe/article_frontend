@@ -4,7 +4,6 @@
       <h5 class="card-title">
         Bulletin Board {{ login ? "Login" : "Sign Up" }}
       </h5>
-      {{ formData }}
       <form class="px-5 mt-3" @submit.prevent="loginSubmit" v-if="login">
         <div class="row">
           <div class="col-12">
@@ -30,7 +29,10 @@
 
           <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
-              <button class="btn btn-primary btn-sm">Login</button>
+              <button class="btn btn-primary btn-sm">
+                {{ isLoading ? "Loggin In, Please wait..." : "Login" }}
+              </button>
+
               <a href="#" @click="login = !login" style="text-decoration: none"
                 >Create an Account?</a
               >
@@ -69,7 +71,9 @@
 
           <div class="col-12">
             <div class="d-flex justify-content-between align-items-center">
-              <button class="btn btn-primary btn-sm">Sign Up</button>
+              <button class="btn btn-primary btn-sm" :disabled="isLoading">
+                {{ isLoading ? "Signing Up Please wait..." : "Sign Up" }}
+              </button>
               <a href="#" @click="login = !login" style="text-decoration: none"
                 >Proceed to Login</a
               >
@@ -83,7 +87,7 @@
 
 <script setup>
 import Card from "@/components/Card.vue";
-import { ref, onMounted, inject } from "vue";
+import { ref, onMounted, inject, watch } from "vue";
 import { useRouter } from "vue-router";
 import api from "@/api";
 
@@ -126,10 +130,11 @@ const loginSubmit = async () => {
       localStorage.setItem("ajioasdmianc8a79sdy0fffaq", token);
       localStorage.setItem("userData", userData);
       api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-      router.push({ name: "main" });
+      router.push({ name: "feed" });
       isLoading.value = false;
     }
   } catch (e) {
+    console.log(e.response.data.message);
     swal("Warning", `Invalid Username / Password`, "warning");
   }
   isLoading.value = false;
@@ -139,9 +144,15 @@ const registerHandler = async () => {
   if (
     formData.value.name.trim().length === 0 ||
     formData.value.email.trim().length === 0 ||
-    formData.value.password.trim().length === 0
+    formData.value.password.trim().length === 0 ||
+    formData.value.password.length < 5
   ) {
-    swal("Warning", "Email and Password are Required!", "warning");
+    const message =
+      formData.value.password.length < 5
+        ? "Password must be at least 5 characters."
+        : "Email and Password are Required!";
+
+    swal("Warning", `${message}`, "warning");
     return;
   }
   isLoading.value = true;
@@ -152,27 +163,29 @@ const registerHandler = async () => {
       email: email,
       password: password,
     });
-
-    console.log(response.status);
     if (response.status === 201) {
       swal(
         "Success",
         "User Created Successfully, Please Proceed to login",
         "success"
       );
-      login.value = false;
+      login.value = !login.value;
+      isLoading.value = false;
+      resetForm();
     }
   } catch (error) {
-    swal("Error", `${error.message}`, "error");
+    swal("Error", `${error.response.data.message}`, "error");
   }
-  isLoading.value = false;
-  //   clearItems();
 };
 
 const clearItems = () => {
   localStorage.removeItem("ajioasdmianc8a79sdy0fffaq");
   localStorage.removeItem("userData");
 };
+
+watch(login, () => {
+  resetForm();
+});
 
 onMounted(() => {
   clearItems();
